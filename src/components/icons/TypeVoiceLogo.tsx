@@ -1,6 +1,6 @@
 import React from "react";
 
-const HandyTextLogo = ({
+const TypeVoiceLogo = ({
   width,
   height,
   className,
@@ -66,4 +66,4 @@ const HandyTextLogo = ({
   );
 };
 
-export default HandyTextLogo;
+export default TypeVoiceLogo;

@@ -1,6 +1,6 @@
 import { Mic } from "lucide-react";
 
-const HandyHand = ({
+const TypeVoiceIcon = ({
   width,
   height,
 }: {
@@ -8,4 +8,4 @@ const HandyHand = ({
   height?: number | string;
 }) => <Mic width={width || 24} height={height || 24} />;
 
-export default HandyHand;
+export default TypeVoiceIcon;

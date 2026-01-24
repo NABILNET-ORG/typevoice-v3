@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Cog, FlaskConical, History, Info, Sparkles } from "lucide-react";
-import HandyTextLogo from "./icons/HandyTextLogo";
-import HandyHand from "./icons/HandyHand";
+import TypeVoiceLogo from "./icons/TypeVoiceLogo";
+import TypeVoiceIcon from "./icons/TypeVoiceIcon";
 import { useSettings } from "../hooks/useSettings";
 import {
   GeneralSettings,
@@ -33,7 +33,7 @@ interface SectionConfig {
 export const SECTIONS_CONFIG = {
   general: {
     labelKey: "sidebar.general",
-    icon: HandyHand,
+    icon: TypeVoiceIcon,
     component: GeneralSettings,
     enabled: () => true,
   },
@@ -87,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className="flex flex-col w-44 h-full border-r border-border bg-sidebar-bg items-center px-3">
-      <HandyTextLogo width={140} className="my-4 px-1" />
+      <TypeVoiceLogo width={140} className="my-4 px-1" />
       <div className="flex flex-col w-full items-center gap-0.5 pt-3 border-t border-border">
         {availableSections.map((section) => {
           const Icon = section.icon;

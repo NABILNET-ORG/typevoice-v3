@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea or new feature for Handy
+about: Suggest an idea or new feature for TypeVoice
 title: ""
 labels: []
 assignees: ""
@@ -8,9 +8,9 @@ assignees: ""
 
 ## 🎯 Feature Requests Go in Discussions!
 
-Thanks for your interest in improving Handy!
+Thanks for your interest in improving TypeVoice!
 
-**Please post feature requests in our [Discussions tab](https://github.com/cjpais/Handy/discussions) instead of opening an issue.**
+**Please post feature requests in our [Discussions tab](https://github.com/NABILNET-ORG/TypeVoice/discussions) instead of opening an issue.**
 
 This helps us:
 
@@ -23,12 +23,12 @@ This helps us:
 
 Before creating a new discussion, check if your request is already being discussed:
 
-- **✏️ Post-processing / Editing Transcripts** - [Join Discussion #168](https://github.com/cjpais/Handy/discussions/168)
-- **⌨️ Keyboard Shortcuts / Hotkeys** - [Join Discussion #211](https://github.com/cjpais/Handy/discussions/211)
+- **✏️ Post-processing / Editing Transcripts** - [Join Discussion #168](https://github.com/NABILNET-ORG/TypeVoice/discussions/168)
+- **⌨️ Keyboard Shortcuts / Hotkeys** - [Join Discussion #211](https://github.com/NABILNET-ORG/TypeVoice/discussions/211)
 
 ### How to submit a new feature request:
 
-1. Go to [Discussions](https://github.com/cjpais/Handy/discussions)
+1. Go to [Discussions](https://github.com/NABILNET-ORG/TypeVoice/discussions)
 2. Search to see if your idea already exists
 3. Click "New discussion"
 4. Choose the appropriate category (Ideas, Feature Requests, etc.)
