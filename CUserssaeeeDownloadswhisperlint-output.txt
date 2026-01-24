@@ -1,0 +1,1 @@
+/usr/bin/bash: line 1: C:Userssaeee.bunbinbun.exe: command not found

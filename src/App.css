@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --color-text: #1a1a2e;
+  --color-background: #f8f9fc;
+  --color-background-ui: #6366f1;
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-accent-subtle: rgba(99, 102, 241, 0.08);
+  --color-surface: rgba(255, 255, 255, 0.6);
+  --color-surface-hover: rgba(99, 102, 241, 0.06);
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-mid-gray: #6b7280;
+  --color-sidebar-bg: rgba(255, 255, 255, 0.5);
+}
+
+:root {
+  /* Typography */
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", system-ui, sans-serif;
+
+  /* Typography settings */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  /* Apply colors */
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+/* Dark theme - applied via class or system preference */
+.dark {
+  --color-text: #e2e8f0;
+  --color-background: #0f1117;
+  --color-background-ui: #6366f1;
+  --color-accent: #818cf8;
+  --color-accent-hover: #a5b4fc;
+  --color-accent-subtle: rgba(129, 140, 248, 0.1);
+  --color-surface: rgba(255, 255, 255, 0.03);
+  --color-surface-hover: rgba(129, 140, 248, 0.08);
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-mid-gray: #64748b;
+  --color-sidebar-bg: rgba(255, 255, 255, 0.02);
+}
+
+@layer utilities {
+  .glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-mid-gray);
+}
