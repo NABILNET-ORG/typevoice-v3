@@ -52,6 +52,10 @@ pub struct TranscriptionManager {
     watcher_handle: Arc<Mutex<Option<thread::JoinHandle<()>>>>,
     is_loading: Arc<Mutex<bool>>,
     loading_condvar: Arc<Condvar>,
+    /// Cached translation engine to avoid reloading the model every transcription
+    translation_engine: Arc<Mutex<Option<WhisperEngine>>>,
+    /// Which model ID is currently loaded in the translation engine cache
+    cached_translation_model_id: Arc<Mutex<Option<String>>>,
 }
 
 impl TranscriptionManager {
@@ -68,6 +72,8 @@ impl TranscriptionManager {
             watcher_handle: Arc::new(Mutex::new(None)),
             is_loading: Arc::new(Mutex::new(false)),
             loading_condvar: Arc::new(Condvar::new()),
+            translation_engine: Arc::new(Mutex::new(None)),
+            cached_translation_model_id: Arc::new(Mutex::new(None)),
         };
 
         // Start the idle watcher
@@ -153,6 +159,13 @@ impl TranscriptionManager {
         {
             let mut current_model = self.current_model_id.lock().unwrap();
             *current_model = None;
+        }
+        // Also clear the cached translation engine to free memory
+        {
+            let mut te = self.translation_engine.lock().unwrap();
+            *te = None;
+            let mut cid = self.cached_translation_model_id.lock().unwrap();
+            *cid = None;
         }
         // Emit unloaded event
         let _ = self.app_handle.emit(
@@ -411,52 +424,70 @@ impl TranscriptionManager {
 
                     if settings.translate_to_english && is_finetune {
                         // Fine-tuned models lose Whisper's translate capability.
-                        // Strategy: use the user's chosen translation model to
-                        // re-process the same audio with translate=true.
+                        // Strategy: use a cached translation engine to avoid
+                        // reloading the model on every transcription.
                         let translation_model_id = settings.translation_model_id.clone()
                             .unwrap_or_else(|| "turbo".to_string());
 
-                        // Try to get translation model path
-                        match self.model_manager.get_model_path(&translation_model_id) {
-                            Ok(translation_model_path) => {
-                                info!("Loading translation model '{}' for Arabic->English", translation_model_id);
-                                let mut translation_engine = WhisperEngine::new();
-                                match translation_engine.load_model(&translation_model_path) {
-                                    Ok(()) => {
-                                        let params = WhisperInferenceParams {
-                                            language: whisper_language, // Auto-detect so English stays English
-                                            translate: true,
-                                            ..Default::default()
-                                        };
-                                        info!("Translating audio with model '{}'", translation_model_id);
-                                        translation_engine
-                                            .transcribe_samples(audio, Some(params))
-                                            .map_err(|e| anyhow::anyhow!("Translation failed: {}", e))?
+                        // Check if we need to load/reload the translation engine
+                        {
+                            let cached_id = self.cached_translation_model_id.lock().unwrap();
+                            let needs_load = cached_id.as_deref() != Some(&translation_model_id);
+                            drop(cached_id);
+
+                            if needs_load {
+                                match self.model_manager.get_model_path(&translation_model_id) {
+                                    Ok(translation_model_path) => {
+                                        info!("Loading translation model '{}' into cache for Arabic->English", translation_model_id);
+                                        let load_start = std::time::Instant::now();
+                                        let mut new_engine = WhisperEngine::new();
+                                        match new_engine.load_model(&translation_model_path) {
+                                            Ok(()) => {
+                                                info!("Translation model '{}' cached in {}ms", translation_model_id, load_start.elapsed().as_millis());
+                                                let mut te = self.translation_engine.lock().unwrap();
+                                                *te = Some(new_engine);
+                                                let mut cid = self.cached_translation_model_id.lock().unwrap();
+                                                *cid = Some(translation_model_id.clone());
+                                            }
+                                            Err(e) => {
+                                                warn!("Failed to load translation model '{}': {}, falling back to Levantine transcription", translation_model_id, e);
+                                                let mut te = self.translation_engine.lock().unwrap();
+                                                *te = None;
+                                                let mut cid = self.cached_translation_model_id.lock().unwrap();
+                                                *cid = None;
+                                            }
+                                        }
                                     }
                                     Err(e) => {
-                                        warn!("Failed to load translation model '{}': {}, falling back to Levantine transcription", translation_model_id, e);
-                                        let params = WhisperInferenceParams {
-                                            language: whisper_language,
-                                            translate: false,
-                                            ..Default::default()
-                                        };
-                                        whisper_engine
-                                            .transcribe_samples(audio, Some(params))
-                                            .map_err(|e| anyhow::anyhow!("Whisper transcription failed: {}", e))?
+                                        warn!("Translation model '{}' not found: {}, falling back to Levantine transcription", translation_model_id, e);
                                     }
                                 }
                             }
-                            Err(e) => {
-                                warn!("Translation model '{}' not found: {}, falling back to Levantine transcription", translation_model_id, e);
-                                let params = WhisperInferenceParams {
-                                    language: whisper_language,
-                                    translate: false,
-                                    ..Default::default()
-                                };
-                                whisper_engine
-                                    .transcribe_samples(audio, Some(params))
-                                    .map_err(|e| anyhow::anyhow!("Whisper transcription failed: {}", e))?
-                            }
+                        }
+
+                        // Use the cached translation engine
+                        let mut te_guard = self.translation_engine.lock().unwrap();
+                        if let Some(ref mut cached_engine) = *te_guard {
+                            let params = WhisperInferenceParams {
+                                language: whisper_language,
+                                translate: true,
+                                ..Default::default()
+                            };
+                            info!("Translating audio with cached model '{}'", translation_model_id);
+                            cached_engine
+                                .transcribe_samples(audio, Some(params))
+                                .map_err(|e| anyhow::anyhow!("Translation failed: {}", e))?
+                        } else {
+                            // Cache load failed, fall back to Levantine transcription
+                            warn!("No cached translation engine available, falling back to Levantine transcription");
+                            let params = WhisperInferenceParams {
+                                language: whisper_language,
+                                translate: false,
+                                ..Default::default()
+                            };
+                            whisper_engine
+                                .transcribe_samples(audio, Some(params))
+                                .map_err(|e| anyhow::anyhow!("Whisper transcription failed: {}", e))?
                         }
                     } else {
                         let params = WhisperInferenceParams {
