@@ -36,5 +36,11 @@ src-tauri/resources/models/*.onnx
 # Windows reserved names
 nul
 
+# Model server (large model files)
+model-server/
+
+# Build/dev scripts with converted models
+scripts/whisper-levantine-converted/
+
 # Stray files
 CUserssaeeeDownloadswhisperlint-output.txt

@@ -269,6 +269,8 @@ pub struct AppSettings {
     pub selected_output_device: Option<String>,
     #[serde(default = "default_translate_to_english")]
     pub translate_to_english: bool,
+    #[serde(default)]
+    pub translation_model_id: Option<String>,
     #[serde(default = "default_selected_language")]
     pub selected_language: String,
     #[serde(default = "default_overlay_position")]
@@ -582,6 +584,7 @@ pub fn get_default_settings() -> AppSettings {
         clamshell_microphone: None,
         selected_output_device: None,
         translate_to_english: false,
+        translation_model_id: None,
         selected_language: "auto".to_string(),
         overlay_position: default_overlay_position(),
         debug_mode: false,

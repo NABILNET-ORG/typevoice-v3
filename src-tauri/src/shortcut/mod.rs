@@ -502,6 +502,15 @@ pub fn change_translate_to_english_setting(app: AppHandle, enabled: bool) -> Res
 
 #[tauri::command]
 #[specta::specta]
+pub fn change_translation_model_setting(app: AppHandle, model_id: Option<String>) -> Result<(), String> {
+    let mut settings = settings::get_settings(&app);
+    settings.translation_model_id = model_id;
+    settings::write_settings(&app, settings);
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
 pub fn change_selected_language_setting(app: AppHandle, language: String) -> Result<(), String> {
     let mut settings = settings::get_settings(&app);
     settings.selected_language = language;

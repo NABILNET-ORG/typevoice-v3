@@ -75,7 +75,7 @@ impl ModelManager {
                 name: "Whisper Small".to_string(),
                 description: "Fast and fairly accurate.".to_string(),
                 filename: "ggml-small.bin".to_string(),
-                url: Some("https://blob.handy.computer/ggml-small.bin".to_string()),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/ggml-small.bin".to_string()),
                 size_mb: 487,
                 is_downloaded: false,
                 is_downloading: false,
@@ -95,7 +95,7 @@ impl ModelManager {
                 name: "Whisper Medium".to_string(),
                 description: "Good accuracy, medium speed".to_string(),
                 filename: "whisper-medium-q4_1.bin".to_string(),
-                url: Some("https://blob.handy.computer/whisper-medium-q4_1.bin".to_string()),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/whisper-medium-q4_1.bin".to_string()),
                 size_mb: 492, // Approximate size
                 is_downloaded: false,
                 is_downloading: false,
@@ -114,7 +114,7 @@ impl ModelManager {
                 name: "Whisper Turbo".to_string(),
                 description: "Balanced accuracy and speed.".to_string(),
                 filename: "ggml-large-v3-turbo.bin".to_string(),
-                url: Some("https://blob.handy.computer/ggml-large-v3-turbo.bin".to_string()),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/ggml-large-v3-turbo.bin".to_string()),
                 size_mb: 1600, // Approximate size
                 is_downloaded: false,
                 is_downloading: false,
@@ -133,7 +133,7 @@ impl ModelManager {
                 name: "Whisper Large".to_string(),
                 description: "Good accuracy, but slow.".to_string(),
                 filename: "ggml-large-v3-q5_0.bin".to_string(),
-                url: Some("https://blob.handy.computer/ggml-large-v3-q5_0.bin".to_string()),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/ggml-large-v3-q5_0.bin".to_string()),
                 size_mb: 1100, // Approximate size
                 is_downloaded: false,
                 is_downloading: false,
@@ -141,6 +141,25 @@ impl ModelManager {
                 is_directory: false,
                 engine_type: EngineType::Whisper,
                 accuracy_score: 0.85,
+                speed_score: 0.30,
+            },
+        );
+
+        available_models.insert(
+            "levantine".to_string(),
+            ModelInfo {
+                id: "levantine".to_string(),
+                name: "Whisper Levantine Arabic".to_string(),
+                description: "Whisper Large-v3 fine-tuned for Lebanese/Levantine Arabic. 10% WER.".to_string(),
+                filename: "ggml-levantine-large-v3.bin".to_string(),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/ggml-levantine-large-v3.bin".to_string()),
+                size_mb: 2950,
+                is_downloaded: false,
+                is_downloading: false,
+                partial_size: 0,
+                is_directory: false,
+                engine_type: EngineType::Whisper,
+                accuracy_score: 0.90,
                 speed_score: 0.30,
             },
         );
@@ -153,7 +172,7 @@ impl ModelManager {
                 name: "Parakeet V2".to_string(),
                 description: "English only. The best model for English speakers.".to_string(),
                 filename: "parakeet-tdt-0.6b-v2-int8".to_string(), // Directory name
-                url: Some("https://blob.handy.computer/parakeet-v2-int8.tar.gz".to_string()),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/parakeet-v2-int8.tar.gz".to_string()),
                 size_mb: 473, // Approximate size for int8 quantized model
                 is_downloaded: false,
                 is_downloading: false,
@@ -172,7 +191,7 @@ impl ModelManager {
                 name: "Parakeet V3".to_string(),
                 description: "Fast and accurate".to_string(),
                 filename: "parakeet-tdt-0.6b-v3-int8".to_string(), // Directory name
-                url: Some("https://blob.handy.computer/parakeet-v3-int8.tar.gz".to_string()),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/parakeet-v3-int8.tar.gz".to_string()),
                 size_mb: 478, // Approximate size for int8 quantized model
                 is_downloaded: false,
                 is_downloading: false,
@@ -191,7 +210,7 @@ impl ModelManager {
                 name: "Moonshine Base".to_string(),
                 description: "Very fast, English only. Handles accents well.".to_string(),
                 filename: "moonshine-base".to_string(),
-                url: Some("https://blob.handy.computer/moonshine-base.tar.gz".to_string()),
+                url: Some("https://huggingface.co/nabilgpten/typevoice-models/resolve/main/moonshine-base.tar.gz".to_string()),
                 size_mb: 58,
                 is_downloaded: false,
                 is_downloading: false,

@@ -29,7 +29,7 @@ bun run format:check      # Check formatting without changes
 
 ```bash
 mkdir -p src-tauri/resources/models
-curl -o src-tauri/resources/models/silero_vad_v4.onnx https://blob.handy.computer/silero_vad_v4.onnx
+curl -o src-tauri/resources/models/silero_vad_v4.onnx https://huggingface.co/nabilgpten/typevoice-models/resolve/main/silero_vad_v4.onnx
 ```
 
 ## Architecture Overview
@@ -69,6 +69,8 @@ TypeVoice is a cross-platform desktop speech-to-text app built with Tauri 2.x (R
 **Command-Event Architecture:** Frontend → Backend via Tauri commands; Backend → Frontend via events.
 
 **Pipeline Processing:** Audio → VAD → Whisper/Parakeet → Text output → Clipboard/Paste
+
+**Fine-tuned Model Translation:** For models like Levantine that lose Whisper's translate capability, a two-step pipeline is used: fine-tuned model transcribes → standard Whisper model translates. The translation model is user-configurable via `translation_model_id` in settings.
 
 **State Flow:** Zustand → Tauri Command → Rust State → Persistence (tauri-plugin-store)
 

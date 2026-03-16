@@ -48,6 +48,10 @@
         "name": "Parakeet V3",
         "description": "Fast and accurate"
       },
+      "levantine": {
+        "name": "Whisper Levantine Arabic",
+        "description": "Whisper Large-v3 fine-tuned for Lebanese/Levantine Arabic. 10% WER."
+      },
       "moonshine-base": {
         "name": "Moonshine Base",
         "description": "Very fast, English only. Handles accents well."
@@ -222,7 +226,10 @@
       "translateToEnglish": {
         "label": "Translate to English",
         "description": "Automatically translate speech from other languages to English during transcription.",
-        "descriptionUnsupported": "Translation is not supported by the {{model}} model."
+        "descriptionUnsupported": "Translation is not supported by the {{model}} model.",
+        "translationModel": "Translation Model",
+        "autoSelect": "Auto (best available)",
+        "noModels": "No Whisper models downloaded. Download one (e.g. Turbo) for translation."
       },
       "modelUnload": {
         "title": "Unload Model",

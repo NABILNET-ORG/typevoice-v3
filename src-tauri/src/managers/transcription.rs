@@ -154,7 +154,6 @@ impl TranscriptionManager {
             let mut current_model = self.current_model_id.lock().unwrap();
             *current_model = None;
         }
-
         // Emit unloaded event
         let _ = self.app_handle.emit(
             "model-state-changed",
@@ -400,15 +399,76 @@ impl TranscriptionManager {
                         Some(normalized)
                     };
 
-                    let params = WhisperInferenceParams {
-                        language: whisper_language,
-                        translate: settings.translate_to_english,
-                        ..Default::default()
-                    };
+                    // Check if we need a translation fallback for fine-tuned models
+                    // Fine-tuned models (like Levantine) lose translation capability,
+                    // so we use a standard Whisper model for translation instead
+                    let current_model_id = self.current_model_id.lock().unwrap().clone();
+                    info!("Current model ID for finetune check: {:?}", current_model_id);
+                    let is_finetune = current_model_id
+                        .as_deref()
+                        .map(|id| id == "levantine")
+                        .unwrap_or(false);
 
-                    whisper_engine
-                        .transcribe_samples(audio, Some(params))
-                        .map_err(|e| anyhow::anyhow!("Whisper transcription failed: {}", e))?
+                    if settings.translate_to_english && is_finetune {
+                        // Fine-tuned models lose Whisper's translate capability.
+                        // Strategy: use the user's chosen translation model to
+                        // re-process the same audio with translate=true.
+                        let translation_model_id = settings.translation_model_id.clone()
+                            .unwrap_or_else(|| "turbo".to_string());
+
+                        // Try to get translation model path
+                        match self.model_manager.get_model_path(&translation_model_id) {
+                            Ok(translation_model_path) => {
+                                info!("Loading translation model '{}' for Arabic->English", translation_model_id);
+                                let mut translation_engine = WhisperEngine::new();
+                                match translation_engine.load_model(&translation_model_path) {
+                                    Ok(()) => {
+                                        let params = WhisperInferenceParams {
+                                            language: whisper_language, // Auto-detect so English stays English
+                                            translate: true,
+                                            ..Default::default()
+                                        };
+                                        info!("Translating audio with model '{}'", translation_model_id);
+                                        translation_engine
+                                            .transcribe_samples(audio, Some(params))
+                                            .map_err(|e| anyhow::anyhow!("Translation failed: {}", e))?
+                                    }
+                                    Err(e) => {
+                                        warn!("Failed to load translation model '{}': {}, falling back to Levantine transcription", translation_model_id, e);
+                                        let params = WhisperInferenceParams {
+                                            language: whisper_language,
+                                            translate: false,
+                                            ..Default::default()
+                                        };
+                                        whisper_engine
+                                            .transcribe_samples(audio, Some(params))
+                                            .map_err(|e| anyhow::anyhow!("Whisper transcription failed: {}", e))?
+                                    }
+                                }
+                            }
+                            Err(e) => {
+                                warn!("Translation model '{}' not found: {}, falling back to Levantine transcription", translation_model_id, e);
+                                let params = WhisperInferenceParams {
+                                    language: whisper_language,
+                                    translate: false,
+                                    ..Default::default()
+                                };
+                                whisper_engine
+                                    .transcribe_samples(audio, Some(params))
+                                    .map_err(|e| anyhow::anyhow!("Whisper transcription failed: {}", e))?
+                            }
+                        }
+                    } else {
+                        let params = WhisperInferenceParams {
+                            language: whisper_language,
+                            translate: settings.translate_to_english,
+                            ..Default::default()
+                        };
+
+                        whisper_engine
+                            .transcribe_samples(audio, Some(params))
+                            .map_err(|e| anyhow::anyhow!("Whisper transcription failed: {}", e))?
+                    }
                 }
                 LoadedEngine::Parakeet(parakeet_engine) => {
                     let params = ParakeetInferenceParams {

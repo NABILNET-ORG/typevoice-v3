@@ -29,7 +29,9 @@ The process is entirely local:
 - Silence is filtered using VAD (Voice Activity Detection) with Silero
 - Transcription uses your choice of models:
   - **Whisper models** (Small/Medium/Turbo/Large) with GPU acceleration when available
+  - **Levantine Arabic** - Fine-tuned Whisper model for accurate Lebanese/Levantine Arabic transcription
   - **Parakeet V3** - CPU-optimized model with excellent performance and automatic language detection
+- **Arabic-to-English translation**: When using the Levantine model with "Translate to English" enabled, a second Whisper model (your choice of Small/Medium/Large/Turbo) automatically translates the audio to English
 - Works on Windows, macOS, and Linux
 
 ## Quick Start
@@ -66,6 +68,25 @@ TypeVoice includes an advanced debug mode for development and troubleshooting. A
 
 - **macOS**: `Cmd+Shift+D`
 - **Windows/Linux**: `Ctrl+Shift+D`
+
+## Levantine Arabic Support
+
+TypeVoice v3 introduces support for **Levantine Arabic** (Lebanese dialect) through a fine-tuned Whisper model. This model accurately transcribes spoken Lebanese Arabic into Arabic text.
+
+### Two-Step Translation Pipeline
+
+Since fine-tuned models lose Whisper's built-in translation capability, TypeVoice uses a smart two-step approach:
+
+1. **Transcription**: The Levantine model transcribes Arabic speech with high accuracy
+2. **Translation**: A standard Whisper model (your choice of Small/Medium/Large/Turbo) translates the same audio to English
+
+To use this feature:
+1. Select the **Levantine** model in Settings → Models
+2. Enable **Translate to English** in Settings
+3. Choose your preferred **Translation Model** from the dropdown (only downloaded Whisper models appear)
+4. Speak in Arabic — TypeVoice transcribes in Arabic, then translates to English
+
+> **Note**: The translation model must be downloaded separately. Larger models (Large, Turbo) provide better translation quality.
 
 ## Known Issues & Current Limitations
 
@@ -180,6 +201,10 @@ Download the models you want from below
 - Medium (492 MB): `https://blob.handy.computer/whisper-medium-q4_1.bin`
 - Turbo (1600 MB): `https://blob.handy.computer/ggml-large-v3-turbo.bin`
 - Large (1100 MB): `https://blob.handy.computer/ggml-large-v3-q5_0.bin`
+
+**Fine-tuned Models:**
+
+- Levantine Arabic: Available through the TypeVoice model server (see Settings → Models)
 
 **Parakeet Models (compressed archives):**
 

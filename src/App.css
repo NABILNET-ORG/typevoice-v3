@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@source not "../model-server";
+@source not "../scripts";
+@source not "../src-tauri";
+
 @theme {
   --color-text: #1a1a2e;
   --color-background: #f8f9fc;

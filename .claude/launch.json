@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Tauri Dev (Full App)",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "tauri", "dev"],
+      "port": 1420
+    },
+    {
+      "name": "Vite Dev (Frontend Only)",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "dev"],
+      "port": 1420
+    },
+    {
+      "name": "Model Server",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "model-server/server.ts"],
+      "port": 3000
+    }
+  ]
+}
