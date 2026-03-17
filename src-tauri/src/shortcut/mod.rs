@@ -504,8 +504,14 @@ pub fn change_translate_to_english_setting(app: AppHandle, enabled: bool) -> Res
 #[specta::specta]
 pub fn change_translation_model_setting(app: AppHandle, model_id: Option<String>) -> Result<(), String> {
     let mut settings = settings::get_settings(&app);
-    settings.translation_model_id = model_id;
+    settings.translation_model_id = model_id.clone();
     settings::write_settings(&app, settings);
+
+    // Pre-load the translation model in background so it's ready when user speaks
+    if let Some(mid) = model_id {
+        let tm = app.state::<std::sync::Arc<crate::managers::transcription::TranscriptionManager>>();
+        tm.preload_translation_model(mid);
+    }
     Ok(())
 }
 

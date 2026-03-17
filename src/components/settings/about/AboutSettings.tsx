@@ -43,7 +43,15 @@ export const AboutSettings: React.FC = () => {
           description={t("settings.about.developer.description")}
           grouped={true}
         >
-          <span className="text-sm font-medium">NABILNET.AI</span>
+          {/* eslint-disable-next-line i18next/no-literal-string */}
+          <a
+            href="https://nabilnet.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-blue-500 hover:text-blue-400 hover:underline transition-colors"
+          >
+            NABILNET.AI
+          </a>
         </SettingContainer>
 
         <AppDataDirectory descriptionMode="tooltip" grouped={true} />

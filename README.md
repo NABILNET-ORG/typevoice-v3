@@ -1,14 +1,14 @@
-# TypeVoice
+# TypeVoice V3
 
 **A free, open source, and extensible speech-to-text application that works completely offline.**
 
-TypeVoice is a cross-platform desktop application built with Tauri (Rust + React/TypeScript) that provides simple, privacy-focused speech transcription. Press a shortcut, speak, and have your words appear in any text field—all without sending your voice to the cloud.
+TypeVoice V3 is a cross-platform desktop application built with Tauri (Rust + React/TypeScript) that provides simple, privacy-focused speech transcription. Press a shortcut, speak, and have your words appear in any text field—all without sending your voice to the cloud.
 
-Developed by **NABILNET.AI**
+Developed by **[NABILNET.AI](https://nabilnet.ai)**
 
-## Why TypeVoice?
+## Why TypeVoice V3?
 
-TypeVoice was created to fill the gap for a truly open source, extensible speech-to-text tool.
+TypeVoice V3 was created to fill the gap for a truly open source, extensible speech-to-text tool.
 
 - **Free**: Accessibility tooling belongs in everyone's hands, not behind a paywall
 - **Open Source**: Together we can build further. Extend TypeVoice for yourself and contribute to something bigger
@@ -264,7 +264,7 @@ Final structure should look like:
 2. **Fork the repository** and create a feature branch
 3. **Test thoroughly** on your target platform
 4. **Submit a pull request** with clear description of changes
-5. **Contact us** at [contact@nabilnet.ai](mailto:contact@nabilnet.ai)
+5. **Contact us** at [contact@nabilnet.ai](mailto:contact@nabilnet.ai) or visit [nabilnet.ai](https://nabilnet.ai)
 
 The goal is to create both a useful tool and a foundation for others to build upon—a well-patterned, simple codebase that serves the community.
 

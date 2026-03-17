@@ -83,7 +83,7 @@
     }
   },
   "modelSelector": {
-    "welcome": "Welcome to TypeVoice!",
+    "welcome": "Welcome to TypeVoice V3!",
     "downloadPrompt": "Download a model below to get started with transcription.",
     "availableModels": "Available Models",
     "downloadModels": "Download Models",
@@ -395,11 +395,11 @@
       "title": "About",
       "version": {
         "title": "Version",
-        "description": "Current version of TypeVoice"
+        "description": "Current version of TypeVoice V3"
       },
       "developer": {
         "title": "Developer",
-        "description": "Developed by NABILNET.AI"
+        "description": "Developed by NABILNET.AI - nabilnet.ai"
       },
       "appDataDirectory": {
         "title": "App Data Directory",

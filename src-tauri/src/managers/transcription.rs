@@ -554,6 +554,53 @@ impl TranscriptionManager {
 
         Ok(final_result)
     }
+
+    /// Pre-load the translation model in a background thread so it's ready
+    /// before the user speaks. Called when the translation model setting changes.
+    pub fn preload_translation_model(&self, model_id: String) {
+        let translation_engine = self.translation_engine.clone();
+        let cached_translation_model_id = self.cached_translation_model_id.clone();
+        let model_manager = self.model_manager.clone();
+
+        // Check if already cached
+        {
+            let cached_id = self.cached_translation_model_id.lock().unwrap();
+            if cached_id.as_deref() == Some(&model_id) {
+                info!("Translation model '{}' already cached, skipping preload", model_id);
+                return;
+            }
+        }
+
+        info!("Pre-loading translation model '{}' in background thread", model_id);
+
+        thread::spawn(move || {
+            match model_manager.get_model_path(&model_id) {
+                Ok(path) => {
+                    let load_start = std::time::Instant::now();
+                    let mut engine = WhisperEngine::new();
+                    match engine.load_model(&path) {
+                        Ok(()) => {
+                            let mut te = translation_engine.lock().unwrap();
+                            *te = Some(engine);
+                            let mut cid = cached_translation_model_id.lock().unwrap();
+                            *cid = Some(model_id.clone());
+                            info!(
+                                "Translation model '{}' pre-loaded in {}ms",
+                                model_id,
+                                load_start.elapsed().as_millis()
+                            );
+                        }
+                        Err(e) => {
+                            warn!("Failed to pre-load translation model '{}': {}", model_id, e);
+                        }
+                    }
+                }
+                Err(e) => {
+                    warn!("Translation model '{}' not found for preload: {}", model_id, e);
+                }
+            }
+        });
+    }
 }
 
 impl Drop for TranscriptionManager {

@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "TypeVoice",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "identifier": "com.pais.typevoice",
   "build": {
     "beforeDevCommand": "bun run dev",
@@ -14,7 +14,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "TypeVoice",
+        "title": "TypeVoice V3",
         "width": 680,
         "height": 570,
         "minWidth": 680,
@@ -73,7 +73,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEJBQjcyMDk1MjA2NjAxRjkKUldUNUFXWWdsU0MzdXRRZi8zYzhqV2FaNUVDbDd2Rk5VM1IvWWowVXdmRFNKQ1BrMXF5RFFsLy8K",
       "endpoints": [
-        "https://github.com/NABILNET-ORG/TypeVoice/releases/latest/download/latest.json"
+        "https://github.com/NABILNET-ORG/typevoice-v3/releases/latest/download/latest.json"
       ]
     }
   }
